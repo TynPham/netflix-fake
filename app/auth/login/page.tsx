@@ -1,16 +1,17 @@
 "use client";
 import Image from "next/image";
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import Input from "@/app/components/input/Input";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Schema, schema } from "@/app/utils/shema";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 export interface LoginProps {}
 
-type FormLoginData = Omit<Schema, "username">;
-const loginSchema = schema.omit(["username"]);
+type FormLoginData = Omit<Schema, "name">;
+const loginSchema = schema.omit(["name"]);
 
 export default function Login(props: LoginProps) {
   const {
@@ -21,8 +22,17 @@ export default function Login(props: LoginProps) {
     resolver: yupResolver(loginSchema),
   });
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: true,
+        callbackUrl: "/",
+      });
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   return (

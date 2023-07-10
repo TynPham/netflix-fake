@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Schema, schema } from "@/app/utils/shema";
 import Link from "next/link";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export interface RegisterProps {}
 
@@ -13,6 +15,7 @@ type FormRegisterData = Schema;
 const registerSchema = schema;
 
 export default function Register(props: RegisterProps) {
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -21,8 +24,17 @@ export default function Register(props: RegisterProps) {
     resolver: yupResolver(registerSchema),
   });
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await axios.post("/api/register", {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      });
+      router.push('/auth/login')
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   return (
@@ -35,7 +47,7 @@ export default function Register(props: RegisterProps) {
           <div className="bg-black bg-opacity-70 p-14 self-center mt-2 lg:w-2/5 lg:max-w-md w-full">
             <h2 className="text-white text-3xl font-bold mb-6">Register</h2>
             <div className="flex flex-col gap-1">
-              <Input id="username" label="Username" type="text" register={register} name="username" errors={errors.username?.message} />
+              <Input id="username" label="Username" type="text" register={register} name="name" errors={errors.name?.message} />
               <Input id="email" label="Email" type="email" register={register} name="email" errors={errors.email?.message} />
               <Input id="password" label="Password" type="password" register={register} name="password" errors={errors.password?.message} />
             </div>
