@@ -8,6 +8,9 @@ import { Schema, schema } from "@/app/utils/shema";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
+import { signIn } from "next-auth/react";
 
 export interface RegisterProps {}
 
@@ -15,7 +18,7 @@ type FormRegisterData = Schema;
 const registerSchema = schema;
 
 export default function Register(props: RegisterProps) {
-  const router = useRouter()
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -31,7 +34,7 @@ export default function Register(props: RegisterProps) {
         email: data.email,
         password: data.password,
       });
-      router.push('/auth/login')
+      router.push("/auth/login");
     } catch (error) {
       console.log(error);
     }
@@ -52,6 +55,20 @@ export default function Register(props: RegisterProps) {
               <Input id="password" label="Password" type="password" register={register} name="password" errors={errors.password?.message} />
             </div>
             <button className="bg-red-600 text-white py-3 w-full rounded-md mt-6 hover:bg-red-700 transition">Sign up</button>
+            <div className="flex justify-center items-center gap-6 mt-8">
+              <div
+                onClick={() => signIn("google", { callbackUrl: "/profiles" })}
+                className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer"
+              >
+                <FcGoogle size={30} />
+              </div>
+              <div
+                onClick={() => signIn("github", { callbackUrl: "/profiles" })}
+                className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer"
+              >
+                <FaGithub size={30} />
+              </div>
+            </div>
             <p className="text-neutral-500 mt-12">
               Already have an account?
               <Link href="/auth/login" className="text-white ml-1 hover:underline cursor-pointer">

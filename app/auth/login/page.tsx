@@ -30,7 +30,7 @@ export default function Login(props: LoginProps) {
         email: data.email,
         password: data.password,
         redirect: true,
-        callbackUrl: "/",
+        callbackUrl: "/profiles",
       });
     } catch (error) {
       console.log(error);
@@ -55,13 +55,13 @@ export default function Login(props: LoginProps) {
             </button>
             <div className="flex justify-center items-center gap-6 mt-8">
               <div
-                onClick={() => signIn("google", { callbackUrl: "/" })}
+                onClick={() => signIn("google", { callbackUrl: "/profiles" })}
                 className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer"
               >
                 <FcGoogle size={30} />
               </div>
               <div
-                onClick={() => signIn("github", { callbackUrl: "/" })}
+                onClick={() => signIn("github", { callbackUrl: "/profiles" })}
                 className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer"
               >
                 <FaGithub size={30} />
